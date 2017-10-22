@@ -12,10 +12,21 @@ export function createData(): Point[] {
     var elements: Point[] = [];
     for (i = 0; i < 100; ++i) {
         var x = minX + i * (maxX - minX) / 100;
-        var y = 2 * x + Math.random() * 1.2;
+        var y = 2 * x + Math.sin(Math.random()) * 2;
         elements.push({x: x, y: y});
     }
+    shuffle(elements);
     return elements;
+}
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
 }
 
 export interface Model {
@@ -34,7 +45,7 @@ function make(vf: MatrixValueFactory, output: Expression, optimizer: () => void)
     };
 }
 
-export function buildModel(): Model {
+export function buildModel(learningRate: number): Model {
     let vf = new MatrixValueFactory();
     let X = new Variable("X");
     let Y = new Variable("Y");
@@ -43,7 +54,6 @@ export function buildModel(): Model {
 
     // Stochastic Gradient Descent
     var cost = new EuclideanLoss(y, Y);
-    var learningRate = 0.01;
     let optimizer = new SGDOptimizer(learningRate).optimize(cost);
     let train = make(vf, cost, optimizer);
     return {params: [w], train: train};
@@ -52,7 +62,7 @@ export function buildModel(): Model {
 export function trainModel(elements: Point[], model: Model) {
     var cost = 0;
     elements.forEach((e) => {
-        cost = model.train(e.x, e.y);
+        cost += model.train(e.x, e.y);
     });
-    return cost;
+    return cost / elements.length;
 }

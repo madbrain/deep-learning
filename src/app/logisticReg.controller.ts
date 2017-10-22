@@ -50,8 +50,10 @@ export class LogisticRegController {
                 }
                 this.epoch++;
                 this.index = 0;
-                this.performance = testPerformance(this.model, this.tests) * 100;
             }
+			if ((this.index % 500) == 0) {
+                this.performance = testPerformance(this.model, this.tests) * 100;
+			}
         }, 10);
     }
 

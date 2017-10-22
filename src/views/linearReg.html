@@ -6,7 +6,9 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <ul>
+                <li>learning rate: <input ng-model="ctrl.learningRate"></li>
                 <li>W: {{ctrl.model.params[0].value.elements}}</li>
+                <li>epoch: {{ctrl.epoch}}</li>
                 <li>Cost: {{ctrl.cost}}</li>
             </ul>
         </div>
