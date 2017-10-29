@@ -15,6 +15,8 @@ export class LogisticRegController {
     public started = false;
     public elements = [];
     public performance = 0;
+    public testPixels = [];
+    public testResult = 0;
 
     private costSum = 0;
     private costCount = 0;
@@ -35,8 +37,20 @@ export class LogisticRegController {
     public reset() {
         this.costs = [];
         this.model = logistic.buildModel();
+        this.stop();
+        this.resetDraw();
+    }
+
+    public stop() {
         this.$interval.cancel(this.timer);
         this.started = false;
+    }
+
+    public resetDraw() {
+        this.testPixels = [];
+        for (let i = 0; i < 28*28; ++i) {
+            this.testPixels.push(0);
+        }
     }
 
     public start() {
@@ -75,5 +89,9 @@ export class LogisticRegController {
             this.copyElements();
         }
         this.index += 1;
+    }
+
+    public recognize() {
+        this.testResult = this.model.predict(this.testPixels);
     }
 }

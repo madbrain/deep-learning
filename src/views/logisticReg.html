@@ -4,8 +4,10 @@
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group">
             <button class="btn btn-default" ng-click="ctrl.start()" ng-disabled="ctrl.started">Start</button>
+            <button class="btn btn-default" ng-click="ctrl.stop()" ng-disabled="!ctrl.started">Stop</button>
             <button class="btn btn-default" ng-click="ctrl.reset()" ng-disabled="!ctrl.started">Reset</button>
             <button class="btn btn-default" ng-click="ctrl.train()" ng-disabled="ctrl.started">Train</button>
+            <button class="btn btn-default" ng-click="ctrl.resetDraw()">Reset Draw</button>
         </div>
     </div>
     <div class="panel panel-default">
@@ -19,6 +21,8 @@
     </div>
     <digit-image pixels="ctrl.samples[ctrl.index].pixels" width="200" height="200"></digit-image>
     <line-chart chart-data="ctrl.costs"></line-chart>
+    <draw-panel pixels="ctrl.testPixels" width="200" height="200" on-draw="ctrl.recognize()"></draw-panel>
+    <span>{{ ctrl.testResult }}</span>
     <div>
         <digit-image pixels="ctrl.elements[0]" width="100" height="100" is-param="true"></digit-image>
         <digit-image pixels="ctrl.elements[1]" width="100" height="100" is-param="true"></digit-image>

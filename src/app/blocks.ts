@@ -132,7 +132,7 @@ export class EuclideanLoss implements Expression {
 
 export class SoftmaxWithLoss implements Expression {
     public value: Matrix;
-    public cost: Matrix;
+    public costs: Matrix;
     public constructor(private vf: MatrixValueFactory, public expr: Expression, public truth: Expression) {}
 
     // e(x_ij) / sum(k) e(x_ik)
@@ -153,7 +153,7 @@ export class SoftmaxWithLoss implements Expression {
             line[j] /= sum
         }
         this.value = this.vf.matrix([line]);
-        return this.computeCost();    
+        return this.value;    
     }
 
     private computeCost(): Matrix {
@@ -162,8 +162,8 @@ export class SoftmaxWithLoss implements Expression {
         for (let i = 0; i < this.value.width(); i++) {
             sum += Math.log(this.value.get(0, i)) * trueVal.get(0, i);
         }
-        this.cost = this.vf.matrix([[- sum]]);
-        return this.cost;
+        this.costs = this.vf.matrix([[- sum]]);
+        return this.costs;
     }
 
     public backward(diff: Matrix): void {
@@ -180,11 +180,11 @@ export class SoftmaxWithLoss implements Expression {
         return this.expr.collectLeaves().merge(this.truth.collectLeaves());
     }
 
-    public result(): Expression {
+    public cost(): Expression {
         return {
             value: this.value,
-            forward: () => { this.forward(); return this.value; },
-            backward: (diff: Matrix) => { throw new Error("not implemented"); },
+            forward: () => { this.forward(); return this.computeCost(); },
+            backward: (diff: Matrix) => { this.backward(diff); },
             collectLeaves: () => { return this.expr.collectLeaves(); }
         };
     }

@@ -23,8 +23,8 @@ function startBrowsersync (config) {
 gulp.task('serve', function() {
     runSequence(
         [/*'sass',*/ 'tsc'],
-        /*['html', 'css'],
-        ['watch-sass', 'watch-ts', 'watch-html', 'watch-css'],*/ function() {
+        /*['html', 'css'],*/
+        [/*'watch-sass',*/ 'watch-ts'/*, 'watch-html', 'watch-css'*/], function() {
         startBrowsersync({
             port: 3000,
             open: false,
@@ -48,12 +48,26 @@ gulp.task('serve', function() {
     });
 });
 
+var tsFiles = [].concat([
+    "src/app/**/!(*.spec)+(.ts)"
+]);
+
+gulp.task('watch-ts', function () {
+    return gulp.watch(tsFiles, function (file) {
+        util.log('Compiling ' + file.path + '...');
+        return compileTs(file.path, true);
+    });
+});
+
 gulp.task('tsc', function() {
+	return compileTs(tsFiles);
+});
+
+function compileTs(files, watchMode) {
+    var watchMode = watchMode || false;
     var tsProject = ts.createProject('tsconfig.json');
-    var res = gulp.src([
-            "src/app/**/!(*.spec)+(.ts)",
-            "typings/**.d.ts"
-        ], {
+    var allFiles = [].concat(files, "typings/**.d.ts");
+    var res = gulp.src(allFiles, {
             base: 'src',
             outDir: 'tmp'
         })
@@ -66,7 +80,7 @@ gulp.task('tsc', function() {
     return res.js
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('tmp'));
-});
+}
 
 gulp.task('build', function (done) {
     runSequence(/*'test',*/ 'build-systemjs', 'build-assets', done);

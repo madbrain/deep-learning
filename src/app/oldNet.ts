@@ -11,10 +11,10 @@ export function buildModel(): Model {
     let w2 = new Parameter("w2", vf.random(10, 625));
     let h1 = new Sigmoid(new InnerProduct(X, w1));
     let soft = new SoftmaxWithLoss(vf, new InnerProduct(h1, w2), Y);
-    var yPred = new Argmax(vf, soft.result());
+    var yPred = new Argmax(vf, soft);
 
     var learningRate = 0.01;
-    let optimizer = new SGDOptimizer(learningRate).optimize(soft);
+    let optimizer = new SGDOptimizer(learningRate).optimize(soft.cost());
     return {
         params: [w1, w2],
         train: makeTrain(vf, soft, optimizer),

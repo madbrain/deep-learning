@@ -5,6 +5,7 @@ import {OldNetController} from './oldNet.controller';
 import {LineChartDirective} from './linechart.directive';
 import {PointRegChartDirective} from './pointreg.directive';
 import {DigitImageDirective} from './digitimage.directive';
+import {DrawPanelDirective} from './drawPanel.directive';
 import {HeaderController} from './header.controller';
 
 angular.module('app', [ "ngRoute" ])
@@ -30,4 +31,5 @@ angular.module('app', [ "ngRoute" ])
     .controller('HeaderController', HeaderController)
     .directive('pointRegressionChart', PointRegChartDirective.Factory())
     .directive('lineChart', LineChartDirective.Factory())
-    .directive('digitImage', DigitImageDirective.Factory());
+    .directive('digitImage', DigitImageDirective.Factory())
+    .directive('drawPanel', DrawPanelDirective.Factory());
