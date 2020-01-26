@@ -12,7 +12,7 @@
   "dependencies": {
     "angular": "1.6.4",
     "angular-route": "1.6.4",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "d3": "3.5.17",
     "jquery": "3.1.0",
     "systemjs": "0.20.13",
