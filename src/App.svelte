@@ -13,7 +13,7 @@
   }
 </script>
 
-<Router>
+<Router base="/deep-learning">
   <Navbar expand="lg" color="light">
     <NavbarBrand>DeepLearning</NavbarBrand>
     <NavbarToggler on:click={() => (isOpen = !isOpen)} />
