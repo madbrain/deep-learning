@@ -1,4 +1,4 @@
-name: CI
+name: Build and Deploy
 
 on:
   push:
@@ -6,22 +6,26 @@ on:
       - main
 
 jobs:
-  build:
-
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup node
+      uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
+        node-version: 18
+
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
+
     - name: Build
-      run: npm build
+      run: npm run build
+
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: JamesIves/github-pages-deploy-action@releases/v4
       with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: dist
+        branch: gh-pages
+        folder: dist
