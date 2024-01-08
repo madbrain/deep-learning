@@ -1,47 +1,40 @@
 <script lang="ts">
-  import { Router, Route } from 'svelte-routing';
+  import Router from 'svelte-spa-router';
+  import active from 'svelte-spa-router/active'
   import { Navbar, NavbarBrand, NavbarToggler, Nav, NavItem, Collapse } from '@sveltestrap/sveltestrap';
   import LinearReg from "./LinearReg.svelte";
   import LogisticReg from "./LogisticReg.svelte";
   import OldNet from "./OldNet.svelte";
-  import MyLink from './MyLink.svelte';
+  import NotFound from "./NotFound.svelte";
 
-  let isOpen = false;
-
-  function handleUpdate(event: any) {
-    isOpen = event.detail.isOpen;
+  const routes = {
+    '/linearReg': LinearReg,
+    '/logisticReg': LogisticReg,
+    '/oldNet': OldNet,
+    '*': NotFound,
   }
 </script>
 
-<Router base="/deep-learning">
-  <Navbar expand="lg" color="light">
-    <NavbarBrand>DeepLearning</NavbarBrand>
-    <NavbarToggler on:click={() => (isOpen = !isOpen)} />
-    <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-      <Nav class="ms-auto" navbar underline>
-        <NavItem>
-          <MyLink to="/linearReg">Linear Regression</MyLink>
-        </NavItem>
-        <NavItem>
-          <MyLink to="/logisticReg">Logistic Regression</MyLink>
-        </NavItem>
-        <NavItem>
-          <MyLink to="/oldNet">Old Network</MyLink>
-        </NavItem>
-      </Nav>
-    </Collapse>
-  </Navbar>
+<Navbar expand="md" color="light" light>
+  <NavbarBrand>DeepLearning</NavbarBrand>
+  <NavbarToggler id="toggler"/>
+  <Collapse expand="md" navbar toggler="#toggler">
+    <Nav class="ms-auto" navbar underline>
+      <NavItem>
+        <a class="nav-link" href="#/linearReg" use:active>Linear Regression</a>
+      </NavItem>
+      <NavItem>
+        <a class="nav-link" href="#/logisticReg" use:active>Logistic Regression</a>
+      </NavItem>
+      <NavItem>
+        <a class="nav-link" href="#/oldNet" use:active>Old Network</a>
+      </NavItem>
+    </Nav>
+  </Collapse>
+</Navbar>
 
-  <main class="mt-3">
-    <div class="container">
-        <Route path="/linearReg" component={LinearReg} />
-        <Route path="/logisticReg" component={LogisticReg} />
-        <Route path="/oldNet" component={OldNet} />
-        <Route path="/"><LinearReg /></Route>
-    </div><!-- /.container -->
-  </main>
-</Router>
-
-<style>
-  
-</style>
+<main class="mt-3">
+  <div class="container">
+    <Router {routes} />
+  </div>
+</main>

@@ -24,9 +24,6 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Prepare dist
-      run: cp dist/index.html dist/404.html
-
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v4
       with:
